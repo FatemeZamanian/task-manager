@@ -7,9 +7,9 @@
   "license": "UNLICENSED",
   "scripts": {
     "typeorm": "typeorm-ts-node-commonjs -d src/@orm/data-source.ts",
-    "migration:generate": "typeorm-ts-node-commonjs migration:generate -d @orm/data-source.ts",
+    "migration:generate": "typeorm-ts-node-commonjs -d src/@orm/data-source.ts migration:generate",
     "migration:create": "typeorm-ts-node-commonjs migration:create",
-    "migration:run": "typeorm-ts-node-commonjs migration:run -d typeorm.config.ts",
+    "migration:run": "typeorm-ts-node-commonjs migration:run -d src/@orm/data-source.ts",
     "migration:revert": "typeorm-ts-node-commonjs migration:revert -d typeorm.config.ts",
     "lint": "eslint 'src/**/*.ts'",
     "lint:fix": "eslint 'src/**/*.ts' --fix",

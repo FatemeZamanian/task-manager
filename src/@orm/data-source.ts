@@ -1,8 +1,12 @@
-import { DataSource } from "typeorm";
-import { config } from "dotenv";
-import { join } from "path";
+import { DataSource } from "typeorm"
+import { config } from "dotenv"
+import { join } from "path"
+import { ProductEntity } from "./models/product.model"
+import { UserProductEntity } from "./models/user_product"
+import { UsersEntity } from "./models/user.model"
+import { TasksEntity } from "./models/task.model"
 
-config();
+config()
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -11,8 +15,8 @@ export const AppDataSource = new DataSource({
   username: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_DB,
-  entities: [join(__dirname, "models/*.model.{ts,js}")],
-  migrations: [join(__dirname, "migrations/*.{ts,js}")],
+  entities: [ProductEntity, UserProductEntity, UsersEntity, TasksEntity],
+  migrations: [join(__dirname, "migrations", "*.ts"), join(__dirname, "migrations", "*.js")],
   synchronize: false,
   logging: true,
-});
+})
