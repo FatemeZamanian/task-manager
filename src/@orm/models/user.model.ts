@@ -1,14 +1,14 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
-import { UserRole } from './types/role.enum'
-import { TasksEntity } from './task.model'
-import { UserProductEntity } from './user_product'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import { UserRole } from "./types/role.enum"
+import { TasksEntity } from "./task.model"
+import { UserProductEntity } from "./user_product.model"
 
-@Entity({ name: 'user' })
+@Entity({ name: "user" })
 export class UsersEntity {
-  @OneToMany(() => TasksEntity, task => task.user)
+  @OneToMany(() => TasksEntity, (task) => task.user)
   tasks: TasksEntity[]
 
-  @OneToMany(() => UserProductEntity, userProduct => userProduct.user)
+  @OneToMany(() => UserProductEntity, (userProduct) => userProduct.user)
   userProduct: UserProductEntity[]
 
   //****************************************************
@@ -31,6 +31,9 @@ export class UsersEntity {
   @Column()
   phonenumber: string
 
-  @Column({ type: 'enum', enum: UserRole })
+  @Column()
+  password: string
+
+  @Column({ type: "enum", enum: UserRole })
   role: UserRole
 }

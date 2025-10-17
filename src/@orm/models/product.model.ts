@@ -1,9 +1,9 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
-import { UserProductEntity } from './user_product'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import { UserProductEntity } from "./user_product.model"
 
-@Entity('product')
+@Entity("product")
 export class ProductEntity {
-  @OneToMany(() => UserProductEntity, userProduct => userProduct.product)
+  @OneToMany(() => UserProductEntity, (userProduct) => userProduct.product)
   userProduct: UserProductEntity[]
 
   //********************************************

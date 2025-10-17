@@ -2,7 +2,7 @@ import { DataSource } from "typeorm"
 import { config } from "dotenv"
 import { join } from "path"
 import { ProductEntity } from "./models/product.model"
-import { UserProductEntity } from "./models/user_product"
+import { UserProductEntity } from "./models/user_product.model"
 import { UsersEntity } from "./models/user.model"
 import { TasksEntity } from "./models/task.model"
 
