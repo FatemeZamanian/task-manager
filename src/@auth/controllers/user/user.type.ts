@@ -66,3 +66,15 @@ export class UserRegisterDtoIn {
   @Matches(/^(\+98|0)?9\d{9}$/, { message: "Invalid phone number" })
   phonenumber?: string
 }
+
+export class LoginUserDtoIn {
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
+  username: string
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
+  password: string
+}
