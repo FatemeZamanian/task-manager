@@ -3,6 +3,7 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import { AuthModule } from "./@auth/module/auth.module"
 import { JwtService } from "@nestjs/jwt"
+import { TaskModule } from "./task/module/task.module"
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { JwtService } from "@nestjs/jwt"
     }),
 
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule, AuthModule],
+      imports: [ConfigModule, AuthModule, TaskModule],
       useFactory: (configService: ConfigService) => {
         // Debug logging
         console.log("DATABASE_HOST:", configService.get("DATABASE_HOST"))

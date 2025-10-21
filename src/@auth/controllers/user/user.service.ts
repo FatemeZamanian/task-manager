@@ -11,7 +11,7 @@ import * as bcrypt from "bcrypt"
 import { UsersEntity } from "../../../@orm/models/user.model"
 import { LoginUserDtoIn, UserRegisterDtoIn } from "./user.type"
 import { UserRole } from "../../../@orm/models/types/role.enum"
-import { JwtService, JwtSignOptions } from "@nestjs/jwt"
+import { JwtSecretRequestType, JwtService, JwtSignOptions } from "@nestjs/jwt"
 
 @Injectable()
 export class UserService {
@@ -61,18 +61,25 @@ export class UserService {
       where: [{ username: body.username.toLowerCase() }],
     })
     if (!user) throw new HttpException("not found user", HttpStatus.NOT_FOUND)
-    const validPassword = await bcrypt.compare(body.password, body.password)
+    const validPassword = await bcrypt.compare(body.password, user.password)
     if (!validPassword) throw new HttpException("password is wrong", HttpStatus.BAD_REQUEST)
     return await this.createUserToken(user)
   }
 
   private async createUserToken(user: UsersEntity) {
-    const token = this.jwt.sign({
-      id: user.id,
-      email: user.email,
-      username: user.username,
-      role: user.role,
-    })
+    const token = this.jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        role: user.role,
+      },
+      {
+        expiresIn: 1,
+        algorithm: "HS256",
+        secret: this.config.get("APP_SECRET"),
+      },
+    )
     return token
   }
 }
