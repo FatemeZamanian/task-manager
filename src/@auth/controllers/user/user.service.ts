@@ -12,6 +12,7 @@ import { UsersEntity } from "../../../@orm/models/user.model"
 import { LoginUserDtoIn, UserRegisterDtoIn } from "./user.type"
 import { UserRole } from "../../../@orm/models/types/role.enum"
 import { JwtSecretRequestType, JwtService, JwtSignOptions } from "@nestjs/jwt"
+require("dotenv").config()
 
 @Injectable()
 export class UserService {
@@ -75,9 +76,9 @@ export class UserService {
         role: user.role,
       },
       {
-        expiresIn: 1,
+        expiresIn: "24h",
         algorithm: "HS256",
-        secret: this.config.get("APP_SECRET"),
+        secret: process.env.APP_SECRET,
       },
     )
     return token
