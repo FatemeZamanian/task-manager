@@ -5,8 +5,7 @@ import { ProductEntity } from "./models/product.model"
 import { UserProductEntity } from "./models/user_product.model"
 import { UsersEntity } from "./models/user.model"
 import { TasksEntity } from "./models/task.model"
-
-config()
+require("dotenv").config()
 
 export const AppDataSource = new DataSource({
   type: "postgres",
