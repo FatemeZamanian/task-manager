@@ -4,6 +4,8 @@ import { Repository } from "typeorm"
 import { JwtService } from "@nestjs/jwt"
 import { TasksEntity } from "../../../@orm/models/task.model"
 import to from "await-to-js"
+import { getTaskDtoOut } from "./manage.type"
+import { title } from "process"
 
 @Injectable()
 export class ManageTaskService {
@@ -13,7 +15,7 @@ export class ManageTaskService {
     private readonly jwt: JwtService,
   ) {}
 
-  async getAllTasks(req: Request) {
+  async getAllTasks(req: Request): Promise<Array<getTaskDtoOut>> {
     const userId = (req.body as any).jwt.id
     const [err, tasks] = await to(
       this.taskRepository
@@ -24,6 +26,33 @@ export class ManageTaskService {
         .getMany(),
     )
     if (err) throw new HttpException("error in get tasks results", HttpStatus.INTERNAL_SERVER_ERROR)
-    return tasks
+    const results = tasks.map((item) => {
+      return {
+        id: item.id,
+        title: item.title,
+        description: item.description,
+      }
+    })
+    return results
+  }
+
+  async getTaskById(req: Request, id: number): Promise<getTaskDtoOut> {
+    const userId = (req.body as any).jwt.id
+    const [err, task] = await to(
+      this.taskRepository
+        .createQueryBuilder("t")
+        .innerJoin("t.user", "u")
+        .where("u.id = :userId", { userId })
+        .andWhere("t.id = :id", { id })
+        .select(["u.id", "t"])
+        .getOne(),
+    )
+    if (err) throw new HttpException("error in get tasks results", HttpStatus.INTERNAL_SERVER_ERROR)
+    if (!task) throw new HttpException("not found task", HttpStatus.NOT_FOUND)
+    return {
+      id: task.id,
+      title: task.title,
+      description: task.description,
+    }
   }
 }
