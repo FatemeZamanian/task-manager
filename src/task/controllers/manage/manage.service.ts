@@ -4,7 +4,7 @@ import { Repository } from "typeorm"
 import { JwtService } from "@nestjs/jwt"
 import { TasksEntity } from "../../../@orm/models/task.model"
 import to from "await-to-js"
-import { getTaskDtoOut } from "./manage.type"
+import { AddTaskDtoIn, getTaskDtoOut } from "./manage.type"
 import { title } from "process"
 
 @Injectable()
@@ -54,5 +54,17 @@ export class ManageTaskService {
       title: task.title,
       description: task.description,
     }
+  }
+  async addTask(req: Request, body: AddTaskDtoIn): Promise<number> {
+    const userId = (req.body as any).jwt.id
+    const [err, task] = await to(
+      this.taskRepository.save({
+        userId,
+        title: body.title,
+        description: body.description,
+      }),
+    )
+    if (err) throw new HttpException("error in save task", HttpStatus.INTERNAL_SERVER_ERROR)
+    return task.id
   }
 }

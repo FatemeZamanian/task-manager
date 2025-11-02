@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Req } from "@nestjs/common"
+import { Body, Controller, Get, Param, Post, Put, Req } from "@nestjs/common"
 import { ManageTaskService } from "./manage.service"
 import { ApiBadGatewayResponse, ApiBearerAuth, ApiExtraModels, ApiTags } from "@nestjs/swagger"
 import { AddTaskDtoIn, getTaskDtoOut } from "./manage.type"
@@ -15,14 +15,15 @@ export class ManageTaskController {
   }
 
   @Get("get/:id")
-  async getById(@Req() req: Request, @Param("id") id: number) {
+  async getById(@Req() req: Request, @Param("id") id: number): Promise<getTaskDtoOut> {
     return await this.manageTaskService.getTaskById(req, id)
   }
 
   @Post("add")
-  async add(@Req() req: Request, @Body() body: AddTaskDtoIn) {
-    // return await this.manageTaskService.addTask()
+  async add(@Req() req: Request, @Body() body: AddTaskDtoIn): Promise<number> {
+    return await this.manageTaskService.addTask(req, body)
   }
 
+  @Put("edit")
   async edit() {}
 }
